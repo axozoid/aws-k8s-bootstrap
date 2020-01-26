@@ -41,9 +41,11 @@ function show_help {
 	echo ""
 	echo "* deploy-all - deloy infra and install Prometheus and Nginx ingress controller"
 	echo ""
+	echo "* delete-pr - delete Prometheus from K8s cluster"
+	echo "* delete-ing - delete Ingress controller from K8s cluster"
 	echo "* cleanup-k8s - destroy K8s cluster and delete related resources in AWS"
 	echo "* cleanup-aws - destroy AWS infrastructure"
-	echo "* cleanup-infra - destroy K8s cluster and delete ALL infra-related resources in AWS (summary of the steps above)"
+	echo "* cleanup-infra - destroy K8s cluster and delete ALL infra-related AWS resources (summary of the steps above)"
 	echo "" 
 	echo "* help 	   - show this help"
 	echo "" 
@@ -178,11 +180,6 @@ function install_ingress {
 
 }
 
-function install_vault {
-	# TODO: check if the tiller exists
-	echo ""
-}
-
 function cleanup_aws {
 	echo "[INFO] Deleting AWS infrastracture.."
 	terraform destroy -auto-approve
@@ -198,12 +195,13 @@ function cleanup_k8s {
 
 function delete_prometheus {
 	# TODO: check if exists
+	echo "[INFO] Deleting Prometheus.."
 	helm delete "${HELM_RELEASE_PROMETHEUS}" --purge
 }
 
 function delete_ingress {
 	# TODO: check if exists
-	echo "[INFO] Deleting Ingress Controller"
+	echo "[INFO] Deleting Ingress Controller.."
 	helm delete "${HELM_RELEASE_NGINX}" --purge
 }
 
@@ -218,8 +216,9 @@ deploy-aws)
 deploy-k8s)
 	deploy_k8s
     ;;
-install-tiller)
-	install_tiller
+deploy-infra)
+	deploy_aws
+	deploy_k8s
     ;;
 install-ing)
 	install_ingress
@@ -231,21 +230,17 @@ install-all)
 	install_ingress
 	install_prometheus
     ;;
-delete-pr)
-	delete_prometheus
-    ;;
-install-vl)
-	hosts_tip
-    ;;
-deploy-infra)
-	deploy_aws
-	deploy_k8s
-    ;;
 deploy-all)
 	deploy_aws
 	deploy_k8s
 	install_ingress
 	install_prometheus
+    ;;
+delete-pr)
+	delete_prometheus
+    ;;
+delete-ing)
+	delete_ingress
     ;;
 cleanup-aws)
 	cleanup_aws
@@ -256,9 +251,6 @@ cleanup-k8s)
 cleanup-infra)
 	cleanup_k8s
 	cleanup_aws
-    ;;
-update-auth)
-	generate_prometheus_secret
     ;;
 *)
     show_help
