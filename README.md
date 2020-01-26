@@ -56,9 +56,11 @@ Available options:
 
 * deploy-all - deloy infra and install Prometheus and Nginx ingress controller
 
+* delete-pr - delete Prometheus from K8s cluster
+* delete-ing - delete Ingress controller from K8s cluster
 * cleanup-k8s - destroy K8s cluster and delete related resources in AWS
 * cleanup-aws - destroy AWS infrastructure
-* cleanup-infra - destroy K8s cluster and delete ALL infra-related resources in AWS (summary of the steps above)
+* cleanup-infra - destroy K8s cluster and delete ALL infra-related AWS resources (summary of the steps above)
 
 * help 	   - show this help
 ```
